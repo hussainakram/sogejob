@@ -5,20 +5,15 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+* Rails 5.2.3
+* Ruby version 2.5.1
 
 * System dependencies
 
 * Configuration
+clone and run `bundle install`
 
 * Database creation
 
-* Database initialization
+`rake db:create db:migrate`
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
