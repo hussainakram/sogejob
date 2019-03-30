@@ -64,6 +64,8 @@ gem "bootstrap", ">= 4.3.1"
 gem 'high_voltage'
 gem 'jquery-rails'
 gem 'pg'
+gem 'sidekiq'
+gem 'whenever'
 
 group :development do
   gem 'better_errors'
