@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  status: 1
+  records_found: 1
+  start_time: 
+  end_time: 2019-04-01 16:35:18
+  scraper_id: 1
+  pid: 1
+  conn_tried: 1
+  conn_failed: 1
+  references: 
+
+two:
+  status: 1
+  records_found: 1
+  start_time: 
+  end_time: 2019-04-01 16:35:18
+  scraper_id: 1
+  pid: 1
+  conn_tried: 1
+  conn_failed: 1
+  references: 

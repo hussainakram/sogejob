@@ -10,9 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2019_04_01_113518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "scraper_logs", force: :cascade do |t|
+    t.integer "status"
+    t.integer "records_found"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer "scraper_id"
+    t.integer "pid"
+    t.integer "conn_tried"
+    t.integer "conn_failed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["scraper_id"], name: "index_scraper_logs_on_scraper_id"
+  end
+
+  create_table "scrapers", force: :cascade do |t|
+    t.integer "thread_size", default: 1
+    t.boolean "proxy_usage", default: true
+    t.string "http_method", default: "get"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end

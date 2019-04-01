@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  thread_size: 1
+  proxy_usage: false
+  http_method: MyString
+
+two:
+  thread_size: 1
+  proxy_usage: false
+  http_method: MyString

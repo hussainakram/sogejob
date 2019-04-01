@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Thread size:</strong>
+  <%= @scraper.thread_size %>
+</p>
+
+<p>
+  <strong>Proxy usage:</strong>
+  <%= @scraper.proxy_usage %>
+</p>
+
+<p>
+  <strong>Http method:</strong>
+  <%= @scraper.http_method %>
+</p>
+
+<%= link_to 'Edit', edit_scraper_path(@scraper) %> |
+<%= link_to 'Back', scrapers_path %>

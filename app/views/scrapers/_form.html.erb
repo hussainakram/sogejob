@@ -1,0 +1,32 @@
+<%= form_with(model: scraper, local: true) do |form| %>
+  <% if scraper.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(scraper.errors.count, "error") %> prohibited this scraper from being saved:</h2>
+
+      <ul>
+      <% scraper.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :thread_size %>
+    <%= form.number_field :thread_size %>
+  </div>
+
+  <div class="field">
+    <%= form.label :proxy_usage %>
+    <%= form.check_box :proxy_usage %>
+  </div>
+
+  <div class="field">
+    <%= form.label :http_method %>
+    <%= form.text_field :http_method %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
