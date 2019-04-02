@@ -10,8 +10,9 @@ class IndeedScraper
   # +country+:: Required parameter (can't be nil and must be valid)
   # +location+:: Optional parameter (must be valid)
   # +search_term+:: Optional parameter
-  def self.scrape_data(country= 'India', location= 'Bombay, Maharashtra', search_term= 'finance')
-    new.scrape_data(country, location, search_term)
+  # +page_number+:: Optional parameter (must be valid)
+  def self.scrape_data(country= 'India', location= 'Bombay, Maharashtra', search_term= 'finance',  page_number= 1)
+    new.scrape_data(country, location, search_term, page_number)
   end
 
   # Scrape jobs from indeed
@@ -19,14 +20,21 @@ class IndeedScraper
   # +country+:: Required parameter (can't be nil and must be valid)
   # +location+:: Optional parameter (must be valid)
   # +search_term+:: Optional parameter
-  def scrape_data(country= 'India', location= 'Bombay, Maharashtra', search_term= 'finance')
+  # +page_number+:: Optional parameter (must be valid)
+  def scrape_data(country= 'India', location= 'Bombay, Maharashtra', search_term= 'finance', page_number= 1)
+    scraper = Scraper.where(name: 'indeed_scraper').first_or_create
+    @scraper_log = scraper.scraper_logs.create(status: 0, records_found: 0, start_time: DateTime.now)
+
     location = '' unless location
     location = CGI.escape location
     field_names = [:job_title, :company, :location, :country, :reviews_count, :apply_link, :description]
-    page_number = 1
+    page_number ||= 1
     base_url = base_url_for country
     relative_url = relative_url_for(search_term, location, page_number)
+
     while page_number
+      @scraper_log.update_attributes(page_number: page_number)
+
       page_url = base_url + relative_url
       puts "Page URL: #{page_url}"
       begin
@@ -83,6 +91,9 @@ class IndeedScraper
             # Store data in database
             mutex.synchronize do
               Job.create(scraped_data)
+              @scraper_log.reload
+              @scraper_log.records_found += 1
+              @scraper_log.save
             end
 
             # So console doesn't get bored.......
@@ -102,6 +113,8 @@ class IndeedScraper
       relative_url = relative_url_for(search_term, location, page_number)
       page_number = nil if body.xpath("//div[@class='pagination']/a[@href='#{relative_url}']").count == 0
     end
+
+    @scraper_log.update_attributes(end_time: DateTime.now, status: 1)
   end
 
   ############### Private Methods ###############

@@ -1,4 +1,4 @@
 class Scraper < ApplicationRecord
-has_many :scraper_logs
+  has_many :scraper_logs
 
 end
