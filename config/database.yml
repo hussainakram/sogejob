@@ -15,7 +15,7 @@
 development:
   adapter:  postgresql
   host:     localhost
-  encoding: unicode
+  encoding: UTF-8
   database: søgejob_development
   pool:     5
   username: postgres
@@ -43,7 +43,7 @@ development:
 test:
   adapter:  postgresql
   host:     localhost
-  encoding: unicode
+  encoding: UTF-8
   database: myapp_test
   pool:     5
   username: postgres
@@ -53,7 +53,7 @@ test:
 production:
   adapter:  postgresql
   host:     localhost
-  encoding: unicode
+  encoding: UTF-8
   database: myapp_production
   pool:     5
   username: postgres
