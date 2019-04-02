@@ -44,7 +44,7 @@ test:
   adapter:  postgresql
   host:     localhost
   encoding: UTF-8
-  database: myapp_test
+  database: søgejob_test
   pool:     5
   username: postgres
   password:
@@ -54,7 +54,7 @@ production:
   adapter:  postgresql
   host:     localhost
   encoding: UTF-8
-  database: myapp_production
+  database: søgejob_production
   pool:     5
   username: postgres
   password:
