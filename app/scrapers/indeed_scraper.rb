@@ -28,7 +28,9 @@ class IndeedScraper
     location = '' unless location
     location = CGI.escape location
     field_names = [:job_title, :company, :location, :country, :reviews_count, :apply_link, :description]
+
     page_number ||= 1
+    page_number = page_number.to_i
     base_url = base_url_for country
     relative_url = relative_url_for(search_term, location, page_number)
 
