@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_01_113518) do
+ActiveRecord::Schema.define(version: 2019_04_02_091731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "jobs", force: :cascade do |t|
+    t.string "job_title"
+    t.string "company"
+    t.string "location"
+    t.string "country"
+    t.integer "reviews_count"
+    t.string "apply_link"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "scraper_logs", force: :cascade do |t|
     t.integer "status"
