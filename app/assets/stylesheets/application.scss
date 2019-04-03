@@ -15,3 +15,25 @@
  */
 
  @import "bootstrap";
+
+body {
+  background-color: #f6f6f6;
+ }
+
+thead {
+  background-color: #e9ecef;
+ }
+
+.navbar {
+  border-bottom: 1px solid #e1e4e8;
+}
+
+tbody {
+  background-color: #f7f7f7 !important;
+}
+
+.btn-xs {
+   padding: 0.2rem 0.3rem;
+   font-size: 0.7rem;
+
+ }
