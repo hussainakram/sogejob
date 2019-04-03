@@ -5,7 +5,7 @@
 <table class="table table-responsive">
   <thead>
     <tr>
-      <th>#ID</th>
+      <th>Name</th>
       <th>Thread size</th>
       <th>Proxy usage</th>
       <th>Http method</th>
@@ -16,7 +16,7 @@
   <tbody>
     <% @scrapers.each do |scraper| %>
       <tr>
-        <td><%= scraper.id %></td>
+        <td><%= scraper.name %></td>
         <td><%= scraper.thread_size %></td>
         <td><%= scraper.proxy_usage %></td>
         <td><%= scraper.http_method %></td>
