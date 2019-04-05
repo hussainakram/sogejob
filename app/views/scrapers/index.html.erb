@@ -1,7 +1,27 @@
 <p id="notice"><%= notice %></p>
 
-<h3>Scrapers</h3>
+<table class="table table-responsive">
+  <thead>
+    <tr>
+      <th>Tried count</th>
+      <th>Saved Job count</th>
+      <th>India</th>
+      <th>Germany</th>
+    </tr>
+  </thead>
 
+  <tbody>
+    <tr>
+      <td><%= ScraperLog.sum(:records_found) %></td>
+      <td><%= Job.count %></td>
+      <td><%= Job.where(country: 'India').count %></td>
+      <td><%= Job.where(country: 'Germany').count %></td>
+
+
+    </tr>
+  </tbody>
+</table>
+<h3>Scrapers</h3>
 <table class="table table-responsive">
   <thead>
     <tr>

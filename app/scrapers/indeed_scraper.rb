@@ -11,7 +11,7 @@ class IndeedScraper
   # +country+:: Required parameter (can't be nil and must be valid)
   # +location+:: Optional parameter (must be valid)
   # +page_number+:: Optional parameter (must be valid)
-  def self.scrape_data(country= 'India', location= 'Delhi',  page_number= 1)
+  def self.scrape_data(country= 'Germany', location= 'Delhi',  page_number= 1)
     new.scrape_data(country, location, page_number)
   end
 
@@ -20,7 +20,7 @@ class IndeedScraper
   # +country+:: Required parameter (can't be nil and must be valid)
   # +location+:: Optional parameter (must be valid)
   # +page_number+:: Optional parameter (must be valid)
-  def scrape_data(country= 'India', location= 'Delhi', page_number= 1)
+  def scrape_data(country= 'Germany', location= 'Delhi', page_number= 1)
     scraper = Scraper.where(name: 'indeed_scraper').first_or_create
     @scraper_log = scraper.scraper_logs.create(status: 0, records_found: 0, start_time: DateTime.now)
 
