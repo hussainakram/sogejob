@@ -101,7 +101,7 @@ class IndeedScraper
                 @scraper_log.save
               end
 
-              pp scraped_data.values
+              # pp scraped_data.values
             end
           end
 
