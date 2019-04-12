@@ -11,7 +11,7 @@ class IndeedScraper
   # +country+:: Required parameter (can't be nil and must be valid)
   # +location+:: Optional parameter (must be valid)
   # +page_number+:: Optional parameter (must be valid)
-  def self.scrape_data(country= 'Germany', location= 'Delhi',  page_number= 1)
+  def self.scrape_data(country= 'USA', location= 'Delhi',  page_number= 1)
     new.scrape_data(country, location, page_number)
   end
 
@@ -20,7 +20,7 @@ class IndeedScraper
   # +country+:: Required parameter (can't be nil and must be valid)
   # +location+:: Optional parameter (must be valid)
   # +page_number+:: Optional parameter (must be valid)
-  def scrape_data(country= 'Germany', location= 'Delhi', page_number= 1)
+  def scrape_data(country= 'USA', location= 'Delhi', page_number= 1)
     scraper = Scraper.where(name: 'indeed_scraper').first_or_create
     @scraper_log = scraper.scraper_logs.create(status: 0, records_found: 0, start_time: DateTime.now)
 
@@ -40,14 +40,15 @@ class IndeedScraper
         @scraper_log.update_attributes(page_number: page_number)
 
         page_url = base_url + relative_url
-        puts "Page URL: #{page_url}"
+        puts "📣         Page URL: #{page_url}       📣"
         begin
           page = get_page(page_url)
           next unless page
           body = parse_body(page.body)
 
           ############### Individual jobs cards ###############
-          cards = body.xpath("//div[contains(concat(' ', normalize-space(@class), ' '), ' jobsearch-SerpJobCard row result ')]")
+          cards = body.search('.jobsearch-SerpJobCard')
+          puts "✅  #{cards.count}"
 
           next unless cards
 
@@ -69,7 +70,7 @@ class IndeedScraper
               company = card.xpath(".//div[@class='companyInfoWrapper']/div/span[@class='company']/span/text()")[0] if (!company || company.text.strip.empty?)
               company = card.xpath(".//div[@class='companyInfoWrapper']/div/span[@class='company']/node()") if (!company || company.text.strip.empty?)
               scraped_data[:company] = company.text.strip if company
-              scraped_data[:location] = (card.xpath(".//div[@class='companyInfoWrapper']/span[@class='location']/text()")[0] || card.xpath(".//div[@class='location']/text()")[0]).text.strip
+              scraped_data[:location] = (card.search('.location')).text.strip
               scraped_data[:country] = country
               reviews = card.xpath(".//div[@class='companyInfoWrapper']/div/a/span[2]/text()")[0] || card.xpath(".//a[@data-tn-element='reviewStars']/span[2]/text()")[0]
               scraped_data[:reviews_count] = reviews.text.strip if reviews
@@ -100,8 +101,6 @@ class IndeedScraper
                 @scraper_log.save
               end
 
-              # So console doesn't get bored.......
-              puts "📣 #{'*'*45} 📣"
               pp scraped_data.values
             end
           end
@@ -134,12 +133,11 @@ class IndeedScraper
     def get_page(page_link)
       begin
         all_response_code = ['403', '404', '502']
-        proxies = ['108.62.147.135', '172.241.246.52', '172.241.247.226', '23.106.211.92', '23.106.207.157', '23.82.186.158', '23.82.184.147', '23.80.142.16', '23.80.141.91', '104.251.84.181']
+        proxies = ['23.81.92.2', '172.241.186.114', '23.82.105.53', '172.241.187.104', '23.82.105.250', '172.241.186.173', '23.82.109.224', '23.81.92.49', '23.81.69.93', '172.241.187.4', '23.80.154.144', '23.82.105.58', '23.80.155.209', '23.81.69.134', '23.82.109.48', '23.81.92.227', '172.241.187.20', '136.0.118.32']
         Mechanize.start do |mechanize|
           mechanize.request_headers = { "Accept-Encoding" => "gzip, deflate, br", "authority" => "www.indeed.com.pk", "scheme" => "https", "accept" => "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" }
           mechanize.user_agent = UserAgent.random
           proxy = proxies.sample
-          puts "Using Proxy #{proxy}:29842"
           mechanize.set_proxy proxy, 29842, 'anicol', '3wP74ZkY'
           page = mechanize.get(page_link)
         end
@@ -160,6 +158,8 @@ class IndeedScraper
         "https://www.indeed.co.in"
       when 'germany'
         "https://de.indeed.com"
+      when 'usa'
+        "https://www.indeed.com"
       end
     end
 
