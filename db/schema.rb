@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_02_120810) do
+ActiveRecord::Schema.define(version: 2019_04_26_140434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 2019_04_02_120810) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "page_number"
+    t.string "keyword"
     t.index ["scraper_id"], name: "index_scraper_logs_on_scraper_id"
   end
 

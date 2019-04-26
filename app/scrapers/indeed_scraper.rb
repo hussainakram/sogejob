@@ -11,8 +11,9 @@ class IndeedScraper
   # +country+:: Required parameter (can't be nil and must be valid)
   # +location+:: Optional parameter (must be valid)
   # +page_number+:: Optional parameter (must be valid)
-  def self.scrape_data(country= 'USA', location= 'Delhi',  page_number= 1)
-    new.scrape_data(country, location, page_number)
+  # +keywords+:: Optional parameter (format [keyword, initial_page_number])
+  def self.scrape_data(country= 'USA', location= 'Delhi',  page_number= 1, keywords= [['twitter',1], ['google',1], ['netflix',1], ['bollywood',1]])
+    new.scrape_data(country, location, page_number, keywords)
   end
 
   # Scrape jobs from indeed
@@ -20,21 +21,25 @@ class IndeedScraper
   # +country+:: Required parameter (can't be nil and must be valid)
   # +location+:: Optional parameter (must be valid)
   # +page_number+:: Optional parameter (must be valid)
-  def scrape_data(country= 'USA', location= 'Delhi', page_number= 1)
+  # +keywords+:: Optional parameter (format [keyword, initial_page_number])
+  def scrape_data(country= 'USA', location= 'Delhi', page_number= 1, keywords= [['twitter',1], ['google',1], ['netflix',1], ['bollywood',1]])
     scraper = Scraper.where(name: 'indeed_scraper').first_or_create
     @scraper_log = scraper.scraper_logs.create(status: 0, records_found: 0, start_time: DateTime.now)
 
     field_names = [:job_title, :company, :location, :country, :reviews_count, :apply_link, :description]
 
-    City.list(country).each do |city|
-      puts "🌇   #{city}    🌇"
+    keywords.each do |keyword|
+      puts "🌇   #{keyword}    🌇"
 
-      page_number ||= 1
+      page_number = keyword[1] || 1
       page_number = page_number.to_i
-      location = CGI.escape city
+      location = CGI.escape location||""
+      keyword = CGI.escape keyword[0]
+      # Keyword which we are currently processing (In case of failure easier to restart scraper)
+      @scraper_log.update_attributes(keyword: keyword)
 
       base_url = base_url_for country
-      relative_url = relative_url_for(location, page_number)
+      relative_url = relative_url_for(location, page_number, keyword)
 
       while page_number
         @scraper_log.update_attributes(page_number: page_number)
@@ -113,7 +118,7 @@ class IndeedScraper
         end
 
         page_number+=1
-        relative_url = relative_url_for(location, page_number)
+        relative_url = relative_url_for(location, page_number, keyword)
         page_number = nil if body.xpath("//div[@class='pagination']/a[@href='#{relative_url}']").count == 0
       end
       ### -----Cities------  ####
@@ -163,10 +168,9 @@ class IndeedScraper
       end
     end
 
-    def relative_url_for(location, page_number)
-      path = "/jobs?q=&l=#{location}&start=#{(page_number-1)*10}"
+    def relative_url_for(location, page_number, keyword)
+      path = "/jobs?q=#{keyword}&l=#{location}&start=#{(page_number-1)*10}"
       path.remove('&l=') unless location.present?
-      path
     end
 
 end
